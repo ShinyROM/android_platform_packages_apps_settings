@@ -94,7 +94,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private static final String KEEP_SCREEN_ON = "keep_screen_on";
     private static final String BT_HCI_SNOOP_LOG = "bt_hci_snoop_log";
     private static final String SELECT_RUNTIME_KEY = "select_runtime";
-    private static final String SELECT_RUNTIME_PROPERTY = "persist.sys.dalvik.vm.lib";
+    private static final String SELECT_RUNTIME_PROPERTY = "persist.sys.dalvik.vm.lib.2";
     private static final String ALLOW_MOCK_LOCATION = "allow_mock_location";
     private static final String HDCP_CHECKING_KEY = "hdcp_checking";
     private static final String HDCP_CHECKING_PROPERTY = "persist.sys.hdcp_checking";
@@ -130,6 +130,9 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private static final String DEBUG_DEBUGGING_CATEGORY_KEY = "debug_debugging_category";
     private static final String DEBUG_APPLICATIONS_CATEGORY_KEY = "debug_applications_category";
     private static final String WIFI_DISPLAY_CERTIFICATION_KEY = "wifi_display_certification";
+    private static final String SELECT_LOGD_SIZE_KEY = "select_logd_size";
+    private static final String SELECT_LOGD_SIZE_PROPERTY = "persist.logd.size";
+    private static final String SELECT_LOGD_DEFAULT_SIZE_PROPERTY = "ro.logd.size";
 
     private static final String OPENGL_TRACES_KEY = "enable_opengl_traces";
 
@@ -146,6 +149,8 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private static final String TERMINAL_APP_PACKAGE = "com.android.terminal";
 
     private static final int RESULT_DEBUG_APP = 1000;
+
+    private static String DEFAULT_LOG_RING_BUFFER_SIZE_IN_BYTES = "262144"; // 256K
 
     private IWindowManager mWindowManager;
     private IBackupManager mBackupManager;
@@ -185,6 +190,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
     private CheckBoxPreference mDebugLayout;
     private CheckBoxPreference mForceRtlLayout;
     private ListPreference mDebugHwOverdraw;
+    private ListPreference mLogdSize;
     private ListPreference mTrackFrameTime;
     private ListPreference mShowNonRectClip;
     private ListPreference mWindowAnimationScale;
@@ -291,6 +297,8 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
         mForceRtlLayout = findAndInitCheckboxPref(FORCE_RTL_LAYOUT_KEY);
         mDebugHwOverdraw = addListPreference(DEBUG_HW_OVERDRAW_KEY);
         mWifiDisplayCertification = findAndInitCheckboxPref(WIFI_DISPLAY_CERTIFICATION_KEY);
+        mLogdSize = addListPreference(SELECT_LOGD_SIZE_KEY);
+
         mWindowAnimationScale = addListPreference(WINDOW_ANIMATION_SCALE_KEY);
         mTransitionAnimationScale = addListPreference(TRANSITION_ANIMATION_SCALE_KEY);
         mAnimatorDurationScale = addListPreference(ANIMATOR_DURATION_SCALE_KEY);
@@ -496,6 +504,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
         updateVerifyAppsOverUsbOptions();
         updateBugreportOptions();
         updateForceRtlOptions();
+        updateLogdSizeValues();
         updateWifiDisplayCertificationOptions();
     }
 
@@ -509,6 +518,7 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
             }
         }
         resetDebuggerOptions();
+        writeLogdSizeOption(null);
         writeAnimationScaleOption(0, mWindowAnimationScale, null);
         writeAnimationScaleOption(1, mTransitionAnimationScale, null);
         writeAnimationScaleOption(2, mAnimatorDurationScale, null);
@@ -958,6 +968,47 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
                 mWifiDisplayCertification.isChecked() ? 1 : 0);
     }
 
+    private void updateLogdSizeValues() {
+        if (mLogdSize != null) {
+            String currentValue = SystemProperties.get(SELECT_LOGD_SIZE_PROPERTY);
+            if (currentValue == null) {
+                currentValue = SystemProperties.get(SELECT_LOGD_DEFAULT_SIZE_PROPERTY);
+                if (currentValue == null) {
+                    currentValue = "256K";
+                }
+            }
+            String[] values = getResources().getStringArray(R.array.select_logd_size_values);
+            String[] titles = getResources().getStringArray(R.array.select_logd_size_titles);
+            String[] summaries = getResources().getStringArray(R.array.select_logd_size_summaries);
+            int index = 1; // punt to second entry if not found
+            for (int i = 0; i < values.length; i++) {
+                if (currentValue.equals(values[i])
+                        || currentValue.equals(titles[i])) {
+                    index = i;
+                    break;
+                }
+            }
+            mLogdSize.setValue(values[index]);
+            mLogdSize.setSummary(summaries[index]);
+            mLogdSize.setOnPreferenceChangeListener(this);
+        }
+    }
+
+    private void writeLogdSizeOption(Object newValue) {
+        final String size = (newValue != null) ?
+                newValue.toString() : DEFAULT_LOG_RING_BUFFER_SIZE_IN_BYTES;
+        SystemProperties.set(SELECT_LOGD_SIZE_PROPERTY, size);
+        pokeSystemProperties();
+        try {
+            Process p = Runtime.getRuntime().exec("logcat -b all -G " + size);
+            p.waitFor();
+            Log.i(TAG, "Logcat ring buffer sizes set to: " + size);
+        } catch (Exception e) {
+            Log.w(TAG, "Cannot set logcat ring buffer sizes", e);
+        }
+        updateLogdSizeValues();
+    }
+
     private void updateCpuUsageOptions() {
         updateCheckBox(mShowCpuUsage, Settings.Global.getInt(getActivity().getContentResolver(),
                 Settings.Global.SHOW_PROCESSES, 0) != 0);
@@ -1283,6 +1334,9 @@ public class DevelopmentSettings extends RestrictedSettingsFragment
             SystemProperties.set(HDCP_CHECKING_PROPERTY, newValue.toString());
             updateHdcpValues();
             pokeSystemProperties();
+            return true;
+        } else if (preference == mLogdSize) {
+            writeLogdSizeOption(newValue);
             return true;
         } else if (preference == mWindowAnimationScale) {
             writeAnimationScaleOption(0, mWindowAnimationScale, newValue);

@@ -279,7 +279,6 @@
     <item msgid="6700305533746877052">"Bluetooth volume"</item>
     <item msgid="2029227495214047094">"keep awake"</item>
     <item msgid="26109888160231211">"monitor location"</item>
-    <item msgid="5753382310468855812">"monitor high power location"</item>
   </string-array>
   <string-array name="app_ops_labels">
     <item msgid="6602854600289714121">"Location"</item>
@@ -296,15 +295,15 @@
     <item msgid="2154671955760380322">"Post notification"</item>
     <item msgid="4282477730595931828">"Location"</item>
     <item msgid="4891423912898525905">"Call phone"</item>
-    <item msgid="2623604824935968113">"Read SMS/MMS"</item>
-    <item msgid="4420177125221176306">"Write SMS/MMS"</item>
+    <item msgid="626463821668200388">"Receive SMS/MMS"</item>
+    <item msgid="1237538540368797101">"Send SMS/MMS"</item>
     <item msgid="3986142739951490025">"Receive SMS/MMS"</item>
     <item msgid="3984213795861739778">"Receive SMS/MMS"</item>
     <item msgid="3656243523752472788">"Receive SMS/MMS"</item>
     <item msgid="8105802370238551510">"Receive SMS/MMS"</item>
     <item msgid="1407766984645388488">"Send SMS/MMS"</item>
-    <item msgid="3527273606643794973">"Read SMS/MMS"</item>
-    <item msgid="4370895547001583812">"Write SMS/MMS"</item>
+    <item msgid="1530132603376027248">"Receive SMS/MMS"</item>
+    <item msgid="1188256962149204607">"Send SMS/MMS"</item>
     <item msgid="4218544235221631789">"Modify settings"</item>
     <item msgid="736541391767350377">"Draw on top"</item>
     <item msgid="5530815681721654194">"Access notifications"</item>
@@ -324,44 +323,11 @@
     <item msgid="7025966722295861512">"Bluetooth volume"</item>
     <item msgid="4665183401128289653">"Keep awake"</item>
     <item msgid="8584357129746649222">"Location"</item>
-    <item msgid="7669257279311110599">"Location"</item>
   </string-array>
   <string-array name="long_press_timeout_selector_titles">
     <item msgid="3511504869290423954">"Short"</item>
     <item msgid="2560532955514699713">"Medium"</item>
     <item msgid="2372711992605524591">"Long"</item>
-  </string-array>
-  <string-array name="captioning_typeface_selector_titles">
-    <item msgid="1319652728542138112">"Default"</item>
-    <item msgid="1016452621833735880">"Sans-serif"</item>
-    <item msgid="2496277987934654454">"Sans-serif condensed"</item>
-    <item msgid="4406003087391086325">"Serif"</item>
-    <item msgid="1558362802170124073">"Monospace"</item>
-  </string-array>
-  <string-array name="captioning_font_size_selector_titles">
-    <item msgid="4800919809575254054">"Very small"</item>
-    <item msgid="6781094565687692782">"Small"</item>
-    <item msgid="8222123259497646551">"Normal"</item>
-    <item msgid="5813217276778560466">"Large"</item>
-    <item msgid="9044232017390975191">"Very large"</item>
-  </string-array>
-  <string-array name="captioning_edge_type_selector_titles">
-    <item msgid="6022616153255438487">"None"</item>
-    <item msgid="1352974708028506778">"Outline"</item>
-    <item msgid="5850876295428722675">"Drop shadow"</item>
-  </string-array>
-  <string-array name="captioning_opacity_selector_titles">
-    <item msgid="7622491218136667566">"25%"</item>
-    <item msgid="2367156416247936773">"50%"</item>
-    <item msgid="5395560410107149298">"75%"</item>
-    <item msgid="8342334626783983353">"100%"</item>
-  </string-array>
-  <string-array name="captioning_preset_selector_titles">
-    <item msgid="1630625150404038035">"White on black"</item>
-    <item msgid="4589278788192525675">"Black on white"</item>
-    <item msgid="1309255027325660115">"Yellow on black"</item>
-    <item msgid="2985943780939258562">"Yellow on blue"</item>
-    <item msgid="7520438652121629055">"Custom"</item>
   </string-array>
   <string-array name="select_runtime_titles">
     <item msgid="3574453009229338122">"Dalvik"</item>
@@ -413,12 +379,9 @@
   <string-array name="overlay_display_devices_entries">
     <item msgid="1606809880904982133">"None"</item>
     <item msgid="688482401508173818">"720x480 mdpi"</item>
-    <item msgid="6027541158956821790">"720 x 480 mdpi (secure)"</item>
-    <item msgid="8181151155909301030">"1280 x 720 tvdpi"</item>
-    <item msgid="2920655562462493148">"1280 x 720 tvdpi (secure)"</item>
-    <item msgid="8910371271391940941">"1920 x 1080 xhdpi"</item>
-    <item msgid="4171600481380800455">"1920 x 1080 xhdpi (secure)"</item>
-    <item msgid="1937752114395156918">"1280 x 720 tvdpi and 1920 x 1080 xhdpi"</item>
+    <item msgid="1725473474827398815">"1280x720 tvdpi"</item>
+    <item msgid="6813511923592083251">"1920x1080 xhdpi"</item>
+    <item msgid="3646519549495410112">"1280x720 tvdpi and 1920x1080 xhdpi"</item>
   </string-array>
   <string-array name="enable_opengl_traces_entries">
     <item msgid="3191973083884253830">"None"</item>
@@ -440,8 +403,7 @@
   <string-array name="debug_hw_overdraw_entries">
     <item msgid="8190572633763871652">"Off"</item>
     <item msgid="7688197031296835369">"Show overdraw areas"</item>
-    <item msgid="2290859360633824369">"Show areas for Deuteranomaly"</item>
-    <item msgid="3448087929560624983">"Show overdraw counter"</item>
+    <item msgid="8332661909019981149">"Show overdraw counter"</item>
   </string-array>
   <string-array name="app_process_limit_entries">
     <item msgid="3401625457385943795">"Standard limit"</item>
@@ -471,11 +433,5 @@
     <item msgid="7389829271787670252">"Ask"</item>
     <item msgid="5077768429488260031">"Never allow"</item>
     <item msgid="1417929597727989746">"Always allow"</item>
-  </string-array>
-  <string-array name="ram_states">
-    <item msgid="7088762389498381203">"normal"</item>
-    <item msgid="4517779899383204000">"moderate"</item>
-    <item msgid="406385694840950802">"low"</item>
-    <item msgid="4212263919458209842">"critical"</item>
   </string-array>
 </resources>

@@ -252,6 +252,9 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory {
             mMountTogglePreference.setEnabled(true);
             mMountTogglePreference.setTitle(mResources.getString(R.string.sd_eject));
             mMountTogglePreference.setSummary(mResources.getString(R.string.sd_eject_summary));
+            addPreference(mUsageBarPreference);
+            addPreference(mItemTotal);
+            addPreference(mItemAvailable);
         } else {
             if (Environment.MEDIA_UNMOUNTED.equals(state) || Environment.MEDIA_NOFS.equals(state)
                     || Environment.MEDIA_UNMOUNTABLE.equals(state)) {
@@ -283,7 +286,7 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory {
                 mFormatPreference.setSummary(mResources.getString(R.string.mtp_ptp_mode_summary));
             }
         } else if (mFormatPreference != null) {
-            mFormatPreference.setEnabled(true);
+            mFormatPreference.setEnabled(mMountTogglePreference.isEnabled());
             mFormatPreference.setSummary(mResources.getString(R.string.sd_format_summary));
         }
     }
